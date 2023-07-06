@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -36,6 +37,11 @@ type Stats struct {
 
 func setupConsulClient() {
 	consulAgent := "consul-agent:8500"
+
+	// Read environment variable if available
+	if consulAgentEnv, ok := os.LookupEnv("CONSUL_AGENT"); ok {
+		consulAgent = consulAgentEnv
+	}
 
 	consulConfig := consul.DefaultConfig()
 	consulConfig.Address = consulAgent
